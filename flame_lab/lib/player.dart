@@ -23,9 +23,7 @@ class MyPlayer extends PositionComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawCircle(position.toOffset(), 
-    15, 
-    Paint()..color = Colors.yellow);
+    canvas.drawCircle(position.toOffset(), 15, Paint()..color = Colors.yellow);
   }
 
   @override

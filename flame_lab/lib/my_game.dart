@@ -1,3 +1,4 @@
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:logger/logger.dart';
@@ -17,30 +18,26 @@ class MyGame extends FlameGame with TapCallbacks {
 
   MyGame()
       : super(
-            camera: CameraComponent.withFixedResolution(
-                width: 1800, height: 1600)) {}
+            camera:
+                CameraComponent.withFixedResolution(width: 900, height: 1600));
 
   @override
   void onMount() {
-    createReact(Vector2(0, 0));
-    createReact(Vector2(100, 100));
+    createReact(Vector2(0, -750));
+    createReact(Vector2(450, 0));
+    createReact(Vector2(-450, 0));
+    createReact(Vector2(0, 800));
 
     world.add(player = MyPlayer());
-    camera.follow(player);
 
     debugMode = true;
 
     super.onMount();
   }
 
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
-
   void createReact(Vector2 pos) {
     var rectangleCom = RectangleComponent(position: pos, size: Vector2(50, 50));
-    rectangleCom.anchor = Anchor.center;
+    rectangleCom.anchor = Anchor.bottomCenter;
     world.add(rectangleCom);
   }
 
