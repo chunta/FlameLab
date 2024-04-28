@@ -1,38 +1,22 @@
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 
-class MyPlayer extends PositionComponent {
-  double speed = 30.0;
-  final _velocity = Vector2(0, 20.0);
-  final _gravity = 900.0;
-  final _jumpSpeed = 350.0;
+
+class Player extends SpriteComponent {
+  Player(Vector2 position, Anchor anchor, Sprite sprite) {
+    this.position = position;
+    this.anchor = anchor;
+    this.sprite = sprite;
+  }
+
   @override
   void onMount() {
     super.onMount();
-    position = Vector2(0, 0);
-    anchor = Anchor.center;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    position += _velocity * dt;
-    _velocity.y += _gravity * dt;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawCircle(position.toOffset(), 15, Paint()..color = Colors.yellow);
+    anchor = Anchor.bottomCenter;
   }
 
   @override
   void onRemove() {
     print('onRemove');
     super.onRemove();
-  }
-
-  void jump() {
-    _velocity.y = -_jumpSpeed;
   }
 }
