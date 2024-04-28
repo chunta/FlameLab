@@ -1,6 +1,4 @@
-import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
 import 'package:logger/logger.dart';
@@ -20,52 +18,60 @@ class MyGame extends FlameGame with TapCallbacks {
     printer: PrettyPrinter(),
   );
 
+  @override
   Future<void> onLoad() async {
     super.onLoad();
-    print(size);
-    deviceSize = size;  
-    camera = 
-    CameraComponent.withFixedResolution(width: screenWidth, height: screenHeight);
-    camera.viewport.debugColor = Colors.pink;
+    deviceSize = size;
+    camera = CameraComponent.withFixedResolution(
+        width: screenWidth, height: screenHeight);
   }
+
   @override
   void onMount() {
-    createReact(Vector2(0, -750), Vector2(50, 50), Colors.white);
-    createReact(Vector2(450, 0), Vector2(50, 50), Colors.white);
-    createReact(Vector2(-450, 0), Vector2(50, 50), Colors.white);
-    createReact(
-        Vector2(0, 800), 
-        Vector2(screenWidth, screenHeight / 7), 
-        Colors.white);
-    
+    createReact(Vector2(0, -screenHeight / 2), Vector2(50, 50), Colors.white,
+        anchor: Anchor.topCenter);
+    createReact(Vector2(screenWidth / 2, 0), Vector2(50, 50), Colors.white,
+        anchor: Anchor.centerRight);
+    createReact(Vector2(-screenWidth / 2, 0), Vector2(50, 50), Colors.white,
+        anchor: Anchor.centerLeft);
+    createReact(Vector2(0, screenHeight / 2), Vector2(50, 50), Colors.white,
+        anchor: Anchor.bottomCenter);
+    createBackgroundImage(Vector2(0, 0), Vector2(screenWidth, screenHeight));
+
     world.add(player = MyPlayer());
 
     debugMode = true;
     super.onMount();
   }
 
-  void createReact(Vector2 pos, Vector2 size, Color color) {
+  void createReact(Vector2 pos, Vector2 size, Color color,
+      {Anchor anchor = Anchor.bottomCenter}) {
     var rectangleCom = RectangleComponent(position: pos, size: size);
-    rectangleCom.anchor = Anchor.bottomCenter;
+    rectangleCom.anchor = anchor;
     rectangleCom.paint = Paint()..color = color;
     world.add(rectangleCom);
   }
 
   void createBackgroundImage(Vector2 pos, Vector2 size) async {
-    final image = await images.load('background.png');
-    final spriteComponent = SpriteComponent();
-    spriteComponent.sprite = await loadSprite("background.png");
-    spriteComponent.size = size;
-    add(spriteComponent);
-
+    final spriteComponent = SpriteComponent(priority: -1);
+    final playerImage = await images.load('background.png');
+    var scaleFactor = screenWidth / playerImage.size.x;
+    final player = Sprite(playerImage, srcSize: playerImage.size);
+    spriteComponent.scale = Vector2(scaleFactor, scaleFactor);
+    spriteComponent.size = Vector2(
+        playerImage.size.x * scaleFactor, playerImage.size.y * scaleFactor);
+    spriteComponent.sprite = player;
+    spriteComponent.position = pos;
+    spriteComponent.anchor = Anchor.center;
+    spriteComponent.autoResize = true;
+    world.add(spriteComponent);
   }
 
   @override
-  Color backgroundColor() => Colors.green;
+  Color backgroundColor() => Colors.black;
 
   @override
   void onTapDown(TapDownEvent event) {
-    logger.d('onTapDown $tapCount');
     tapCount++;
     player.jump();
     super.onTapDown(event);
