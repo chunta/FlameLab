@@ -28,14 +28,7 @@ class MyGame extends FlameGame with TapCallbacks {
 
   @override
   void onMount() {
-    createReact(Vector2(0, -screenHeight / 2), Vector2(50, 50), Colors.white,
-        anchor: Anchor.topCenter);
-    createReact(Vector2(screenWidth / 2, 0), Vector2(50, 50), Colors.white,
-        anchor: Anchor.centerRight);
-    createReact(Vector2(-screenWidth / 2, 0), Vector2(50, 50), Colors.white,
-        anchor: Anchor.centerLeft);
-    createReact(Vector2(0, screenHeight / 2), Vector2(50, 50), Colors.white,
-        anchor: Anchor.bottomCenter);
+    createDebugRects();
 
     createBackgroundImage(Vector2(0, 0));
 
@@ -51,6 +44,17 @@ class MyGame extends FlameGame with TapCallbacks {
     rectangleCom.anchor = anchor;
     rectangleCom.paint = Paint()..color = color;
     world.add(rectangleCom);
+  }
+
+  void createDebugRects() {
+    createReact(Vector2(0, -screenHeight / 2), Vector2(50, 50), Colors.white,
+        anchor: Anchor.topCenter);
+    createReact(Vector2(screenWidth / 2, 0), Vector2(50, 50), Colors.white,
+        anchor: Anchor.centerRight);
+    createReact(Vector2(-screenWidth / 2, 0), Vector2(50, 50), Colors.white,
+        anchor: Anchor.centerLeft);
+    createReact(Vector2(0, screenHeight / 2), Vector2(50, 50), Colors.white,
+        anchor: Anchor.bottomCenter);
   }
 
   void createBackgroundImage(Vector2 pos) async {

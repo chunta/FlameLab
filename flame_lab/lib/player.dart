@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 
-
 class Player extends SpriteComponent {
   Player(Vector2 position, Anchor anchor, Sprite sprite) {
     this.position = position;
